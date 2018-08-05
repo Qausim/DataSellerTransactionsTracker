@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Sales Tracker</string>
+    <string name="search">Search</string>
+    <string name="view_purchase_history">View Purchase History</string>
+    <string name="search_by_name">Search by name</string>
+    <string name="search_by_number">Search by number</string>
+    <string name="delete_entries">Delete all entries</string>
+</resources>

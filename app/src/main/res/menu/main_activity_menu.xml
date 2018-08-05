@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_search_by_name"
+        android:title="@string/search_by_name"
+        android:orderInCategory="1"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_search_by_number"
+        android:title="@string/search_by_number"
+        android:orderInCategory="2"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_delete_entries"
+        android:title="@string/delete_entries"
+        android:orderInCategory="3"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_view_purchase_history"
+        android:title="@string/view_purchase_history"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
+</menu>
