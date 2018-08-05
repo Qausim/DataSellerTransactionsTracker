@@ -42,13 +42,13 @@ public final class TransactionContract {
         public static final String _ID = BaseColumns._ID;
 
         // The table's ID field a unique identifier (name, phone)
-        public static final String ID = "id";
+        public static final String NAME = "name";
 
         // Field name for the customer's or service provider's phone number
         public static final String PHONE = "phone";
 
         // Field name for the service provided
-        public static final String SERVICE_PROVIDED = "service_provided";
+        public static final String UNIT = "unit";
 
         // Field name for the amount of transaction
         public static final String COST = "cost";
@@ -72,5 +72,11 @@ public final class TransactionContract {
         public static final int CUSTOMER = 1;
         // For a service provider
         public static final int SERVICE_PROVIDER = 2;
+
+        // For the payment state
+        // If paid
+        public static final int PAID = 3;
+        // If pending
+        public static final int PENDING = 4;
     }
 }

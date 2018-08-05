@@ -41,15 +41,17 @@ public class TransactionDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TRANSACTIONS_TABLE =
                 "CREATE " + TransactionEntry.TABLE_NAME + "(" +
 
-                        TransactionEntry._ID + " PRIMARY KEY AUTOINCREMENT, "   +
+                        TransactionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "       +
 
-                        TransactionEntry.ID + " TEXT NOT NULL, "                     +
+                        TransactionEntry.NAME + " TEXT NOT NULL, "                            +
 
                         TransactionEntry.TITLE + " INTEGER NOT NULL, "                      +
 
-                        TransactionEntry.DATE + " TEXT NOT NULL, "                          +
+                        TransactionEntry.DATE + " INTEGER NOT NULL, "                       +
 
-                        TransactionEntry.COST + " REAL NOT NULL, "                          +
+                        TransactionEntry.UNIT + " TEXT NOT NULL, "                          +
+
+                        TransactionEntry.COST + " INTEGER NOT NULL, "                          +
 
                         TransactionEntry.PHONE + " INTEGER NOT NULL, "                      +
 
