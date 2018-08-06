@@ -30,7 +30,7 @@ import com.example.android.datasellertransactionstracker.data.TransactionContrac
  */
 public class TransactionDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "data_business.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public TransactionDbHelper (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,21 +39,23 @@ public class TransactionDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // String contains the SQL statement to create a new table transaction
         String SQL_CREATE_TRANSACTIONS_TABLE =
-                "CREATE " + TransactionEntry.TABLE_NAME + "(" +
+                "CREATE TABLE " + TransactionEntry.TABLE_NAME + "(" +
 
                         TransactionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "       +
 
-                        TransactionEntry.NAME + " TEXT NOT NULL, "                            +
+                        TransactionEntry.NAME + " TEXT NOT NULL, "                          +
 
                         TransactionEntry.TITLE + " INTEGER NOT NULL, "                      +
 
-                        TransactionEntry.DATE + " INTEGER NOT NULL, "                       +
+                        TransactionEntry.DATE + " TEXT NOT NULL, "                          +
+
+                        TransactionEntry.TIME + " TEXT NOT NULL, "                          +
 
                         TransactionEntry.UNIT + " TEXT NOT NULL, "                          +
 
-                        TransactionEntry.COST + " INTEGER NOT NULL, "                          +
+                        TransactionEntry.COST + " INTEGER NOT NULL, "                       +
 
-                        TransactionEntry.PHONE + " INTEGER NOT NULL, "                      +
+                        TransactionEntry.PHONE + " TEXT NOT NULL, "                      +
 
                         TransactionEntry.PAYMENT_STATE + " INTEGER NOT NULL, "              +
 

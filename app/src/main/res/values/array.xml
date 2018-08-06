@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="title_options_array">
+        <item>@string/title_hint</item>
+        <item>@string/customer</item>
+        <item>@string/service_provider</item>
+    </array>
+
+    <array name="payment_state_options_array">
+        <item>@string/payment_hint</item>
+        <item>@string/paid</item>
+        <item>@string/pending</item>
+    </array>
+</resources>

@@ -1,5 +1,8 @@
 package com.example.android.datasellertransactionstracker;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SearchRecentSuggestionsProvider;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
     private TransactionDbHelper mDbHelper;
     // Container for Transaction objects;
     ArrayList<Transaction> transactions;
+    public static String paid, pending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +50,18 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
         floatingActionButton = findViewById(R.id.fab_add_transaction);
         transactions = new ArrayList<>();
         mDbHelper = new TransactionDbHelper(this);
+        paid = getString(R.string.paid);
+        pending = getString(R.string.pending);
 
         // Set click listener on the floatingActionButton
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // do nothing for now
-                return;
+                Context context = MainActivity.this;
+                Class destination = AddTransactionActivity.class;
+
+                Intent intent = new Intent(context, destination);
+                startActivity(intent);
             }
         });
     }
@@ -63,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
     @Override
     protected void onStart() {
         super.onStart();
+        if (!transactions.isEmpty()) {
+            transactions.clear();
+        }
+        populateRecyclerViewWithData();
     }
 
     /**
@@ -108,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
         int paymentStateColIndex = cursor.getColumnIndex(TransactionEntry.PAYMENT_STATE);
         int descriptionColIndex = cursor.getColumnIndex(TransactionEntry.DESCRIPTION);
         int dateColIndex = cursor.getColumnIndex(TransactionEntry.DATE);
+        int timeColIndex = cursor.getColumnIndex(TransactionEntry.TIME);
 
         try {
             // Iterate through the cursor if query was successful
@@ -115,18 +129,19 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
                 // Get the value in the columns of each row
                 int currentId = cursor.getInt(idColIndex);
                 String currentName = cursor.getString(nameColIndex);
-                int currentPhone = cursor.getInt(phoneColIndex);
+                String currentPhone = cursor.getString(phoneColIndex);
                 int currentUnit = cursor.getInt(unitColIndex);
                 int currentCost = cursor.getInt(costColIndex);
                 int currentTitle = cursor.getInt(titleColIndex);
                 int currentPaymentState = cursor.getInt(paymentStateColIndex);
                 String currentDescription = cursor.getString(descriptionColIndex);
-                long currentDate = Long.parseLong(String.valueOf(cursor.getInt(dateColIndex)));
+                String currentDate = cursor.getString(dateColIndex);
+                String currentTime = cursor.getString(timeColIndex);
 
                 // Add a new transaction object to transactions
                 transactions.add(new Transaction(currentName, currentId, currentTitle,
                         currentPhone, currentUnit, currentCost, currentPaymentState,
-                        currentDescription, currentDate));
+                        currentDescription, currentDate, currentTime));
 
             }
         } catch (SQLException e) {
@@ -137,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
 
         if (!transactions.isEmpty()) {
             mAdapter = new TransactionAdapter(transactions, this);
+            mRecylerView.setAdapter(mAdapter);
         }
     }
 
@@ -163,7 +179,21 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
 
     @Override
     public void onTransactionItemClicked(int itemIndex) {
-        Toast.makeText(this, "Item " + itemIndex + " clicked", Toast.LENGTH_LONG)
-                .show();
+        // Get the clicked transaction
+        Transaction currentTransaction = transactions.get(itemIndex);
+        // Get the id of the clicked transaction
+        int currentTransactionId = currentTransaction.getId();
+
+        // MainActivity is the parent of the new activity to be started
+        Context parent = MainActivity.this;
+        // The destination activity is DetailsActivity
+        Class destination = DetailsActivity.class;
+
+        // Create starter intent
+        Intent starterIntent = new Intent(parent, destination);
+        // Put the transaction id in the intent
+        starterIntent.putExtra(getString(R.string.id), currentTransactionId);
+        // Start the activity
+        startActivity(starterIntent);
     }
 }

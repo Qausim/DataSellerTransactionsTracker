@@ -13,9 +13,11 @@ public class Transaction {
     // Whether transaction was with customer or service provider
     private int title;
     // The phone number of the customer or service provider
-    private int phone;
+    private String phone;
     // The date of each transaction
-    private long date;
+    private String date;
+    // The time of creation of each transaction
+    private String time;
     // The unit of each transaction
     private int unit;
     // The cost of each transaction
@@ -37,9 +39,10 @@ public class Transaction {
      * @param paymentState
      * @param description
      * @param date
+     * @param time
      */
-    public Transaction(String name, int id, int title, int phone, int unit, int cost, int paymentState,
-                     String description, long date) {
+    public Transaction(String name, int id, int title, String phone, int unit, int cost,
+                       int paymentState, String description, String date, String time) {
         this.name = name;
         this.id = id;
         this.title = title;
@@ -49,6 +52,7 @@ public class Transaction {
         this.paymentState = paymentState;
         this.description = description;
         this.date = date;
+        this.time = time;
     }
 
     /**
@@ -63,16 +67,24 @@ public class Transaction {
     public int getTitle() { return this.title;}
 
     /**
-     * @return phone number of the second party for each transaction.*/
-    public int getPhone() { return this.phone; }
+     * @return phone number of the second party for each transaction.
+     */
+    public String getPhone() { return this.phone; }
 
-    /**@return date of each transaction.*/
-    public long getDate() { return this.date;}
+    /**
+     * @return date of each transaction.*/
+    public String  getDate() { return this.date;}
 
-    /**@return unit of each transaction.*/
+    /**
+     * @return time of creation of the transaction.
+     */
+    public String getTime() { return this.time; }
+    /**
+     * @return unit of each transaction.*/
     public int getUnit() { return this.unit;}
 
-    /**@return cost of each transaction. */
+    /**
+     * @return cost of each transaction. */
     public int getCost() { return this.cost;}
 
     /**

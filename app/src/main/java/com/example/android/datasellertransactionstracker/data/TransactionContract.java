@@ -65,6 +65,9 @@ public final class TransactionContract {
         // Field name for the date
         public static final String DATE = "date";
 
+        // Field name for the time
+        public static final String TIME = "time";
+
         // The title field is limited options field. The individual is either a customer or a
         // service provider
         // Constant integer variables will be declared for each

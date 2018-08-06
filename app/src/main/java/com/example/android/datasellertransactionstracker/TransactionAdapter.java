@@ -5,7 +5,6 @@ package com.example.android.datasellertransactionstracker;
  */
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
@@ -54,27 +54,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Get the paymentState
         switch (currentTransaction.getPaymentState()) {
             case TransactionEntry.PAID:
-                holder.paymentStateTextView.setText(Resources.getSystem().getString(R.string.paid));
+                holder.paymentStateTextView.setText(MainActivity.paid);
                 break;
             case TransactionEntry.PENDING:
-                holder.paymentStateTextView.setText(Resources.getSystem().getString(R.string
-                        .pending));
+                holder.paymentStateTextView.setText(MainActivity.pending);
         }
-        // Get the date
-        long dateTime = currentTransaction.getDate();
-        // Create a simple format for formatting the date and time
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM a");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd mmm, yyyy");
 
-        // Create a new Date object using passing date in as an argument.
-        Date date = new Date(dateTime);
-        // Format the time in the form 11:33 am, and the date in the form 03 Aug, 2012
-        String timeString = timeFormat.format(date);
-        String dateString = dateFormat.format(date);
         // Set the content of the timeTextView
-        holder.timeTextView.setText(timeString);
+        holder.timeTextView.setText(currentTransaction.getTime());
         // Set the content of the dateTextView
-        holder.dateTextView.setText(dateString);
+        holder.dateTextView.setText(currentTransaction.getDate());
     }
 
     @Override

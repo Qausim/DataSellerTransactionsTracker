@@ -7,10 +7,10 @@
     tools:context="com.example.android.datasellertransactionstracker.AddTransactionActivity">
 
     <EditText
-        android:id="@+id/ed_id"
+        android:id="@+id/ed_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:maxLines="1"
         android:hint="@string/id_hint"
         android:layout_marginTop="20dp"
@@ -22,7 +22,7 @@
         android:id="@+id/ed_phone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:maxLines="1"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
@@ -39,6 +39,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textAlignment="viewStart"
+        android:autofillHints="@string/title_hint"
         android:spinnerMode="dropdown"
         android:gravity="start" />
 
@@ -46,7 +47,7 @@
         android:id="@+id/ed_unit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:maxLines="1"
         android:hint="@string/unit_hint"
         android:layout_marginTop="20dp"
@@ -58,7 +59,7 @@
         android:id="@+id/ed_cost"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:maxLines="1"
         android:hint="@string/cost_hint"
         android:layout_marginTop="20dp"
@@ -67,20 +68,23 @@
         android:textSize="22sp"/>
 
     <Spinner
+        android:id="@+id/payment_state_spinner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:spinnerMode="dropdown"
         android:textAlignment="viewStart"
+        android:autofillHints="@string/payment_hint"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:gravity="start"/>
 
     <EditText
+        android:id="@+id/ed_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:textSize="22sp"
         android:hint="@string/description_hint"
         android:textAlignment="viewStart"
