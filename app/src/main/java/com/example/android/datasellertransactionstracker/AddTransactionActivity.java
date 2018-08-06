@@ -18,6 +18,10 @@ import android.widget.Toast;
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
 import com.example.android.datasellertransactionstracker.data.TransactionDbHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class AddTransactionActivity extends AppCompatActivity {
     // Declaring the various UI components
     private EditText nameEditText, phoneEditText, unitEditText, costEditText, descriptionEditText;
@@ -119,8 +123,8 @@ public class AddTransactionActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // If save
             case R.id.action_save:
-                // If id was inputed
-                boolean idEntered = !TextUtils.isEmpty(nameEditText.getText()) && nameEditText
+                // If name was inputed
+                boolean nameEntered = !TextUtils.isEmpty(nameEditText.getText()) && nameEditText
                         .getText().toString().trim() != "";
                 // If phone number was entered
                 boolean phoneEntered = !TextUtils.isEmpty(phoneEditText.getText()) && phoneEditText
@@ -141,19 +145,18 @@ public class AddTransactionActivity extends AppCompatActivity {
                 boolean titleSelected = mTitle == TransactionEntry.CUSTOMER || mTitle ==
                         TransactionEntry.SERVICE_PROVIDER;
                 // If all above is true
-                if (idEntered && phoneEntered && unitEntered && costEntered && descriptionEntered &&
+                if (nameEntered && phoneEntered && unitEntered && costEntered && descriptionEntered &&
                         paymentStateSelected && titleSelected) {
                     try {
                         // Get the various components
-                        String id = nameEditText.getText().toString().trim();
-                        int phone = Integer.parseInt(phoneEditText.getText().toString().trim());
+                        String name = nameEditText.getText().toString().trim();
+                        String phone = phoneEditText.getText().toString().trim();
                         String unit = unitEditText.getText().toString().trim();
                         int cost = Integer.parseInt(costEditText.getText().toString().trim());
                         String description = descriptionEditText.getText().toString();
 
                         // Insert new entry into database
-                        insertIntoDatabase(id, phone, unit, cost, description, mTitle, mPaymentState);
-                        finish();
+                        insertIntoDatabase(name, phone, unit, cost, description, mTitle, mPaymentState);
 
                     } catch (Exception e){
                         Toast.makeText(getApplicationContext(), getString(R.string
@@ -171,10 +174,17 @@ public class AddTransactionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertIntoDatabase(String id, int phone, String unit, int cost, String description,
+    private void insertIntoDatabase(String name, String phone, String unit, int cost, String description,
                                    int title, int paymentState) {
         // Get current date
-        long date = System.currentTimeMillis();
+        Date date = Calendar.getInstance().getTime();
+        // Set simple date format for both time and date
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+
+        // Format the time and date
+        String timeString = timeFormat.format(date);
+        String dateString = dateFormat.format(date);
         // Create an instance of the database helper class
         TransactionDbHelper mDbHelper = new TransactionDbHelper(getApplicationContext());
         // Get writable database
@@ -184,26 +194,30 @@ public class AddTransactionActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
 
         // Put values into it
-        values.put(TransactionEntry.NAME, id);
+        values.put(TransactionEntry.NAME, name);
         values.put(TransactionEntry.PHONE, phone);
         values.put(TransactionEntry.UNIT, unit);
         values.put(TransactionEntry.COST, cost);
         values.put(TransactionEntry.DESCRIPTION, description);
         values.put(TransactionEntry.TITLE, title);
         values.put(TransactionEntry.PAYMENT_STATE, paymentState);
-        values.put(TransactionEntry.DATE, date);
+        values.put(TransactionEntry.DATE, dateString);
+        values.put(TransactionEntry.TIME, timeString);
 
         // Insert into database
         long newRowId = database.insert(TransactionEntry.TABLE_NAME, null, values);
 
-        // If error
-        if (newRowId == -1) {
+        // If insert was not successfully
+        if (newRowId < 0) {
+            // Make a toast that insertion was not successful
             Toast.makeText(getApplicationContext(), getString(R.string
                             .database_insert_error_message), Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string
-                    .database_insert_success_message), Toast.LENGTH_LONG).show();
-        }
+        } else {// Else if successful
+            /*Toast.makeText(getApplicationContext(), getString(R.string
+                    .database_insert_success_message), Toast.LENGTH_LONG).show(); */
+            // Go back home
+            finish();
 
+        }
     }
 }

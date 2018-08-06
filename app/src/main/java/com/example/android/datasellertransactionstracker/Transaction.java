@@ -19,7 +19,7 @@ public class Transaction {
     // The time of creation of each transaction
     private String time;
     // The unit of each transaction
-    private int unit;
+    private String unit;
     // The cost of each transaction
     private int cost;
     // The state of payment for each transaction
@@ -41,7 +41,7 @@ public class Transaction {
      * @param date
      * @param time
      */
-    public Transaction(String name, int id, int title, String phone, int unit, int cost,
+    public Transaction(String name, int id, int title, String phone, String unit, int cost,
                        int paymentState, String description, String date, String time) {
         this.name = name;
         this.id = id;
@@ -81,7 +81,7 @@ public class Transaction {
     public String getTime() { return this.time; }
     /**
      * @return unit of each transaction.*/
-    public int getUnit() { return this.unit;}
+    public String getUnit() { return this.unit;}
 
     /**
      * @return cost of each transaction. */

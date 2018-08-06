@@ -25,7 +25,8 @@
     <string name="cost_hint">Input cost</string>
     <string name="payment_hint">Select payment state</string>
     <string name="id">id</string>
-    <string name="tv_id">id: </string>
+    <string name="created">Created: </string>
+    <string name="tv_id">Customers ID: </string>
     <string name="tv_phone">Phone: </string>
     <string name="tv_title">Title: </string>
     <string name="tv_unit">Unit: </string>

@@ -7,29 +7,50 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
 import com.example.android.datasellertransactionstracker.data.TransactionDbHelper;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    private TextView nameTextView, phoneTextView, titleTextView, unitTextView, costTextView,
+    paymentStateTextView, descriptionTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        nameTextView = findViewById(R.id.tv_name2);
+        phoneTextView = findViewById(R.id.tv_phone);
+        titleTextView = findViewById(R.id.tv_title);
+        unitTextView = findViewById(R.id.tv_unit);
+        costTextView = findViewById(R.id.tv_cost2);
+        paymentStateTextView = findViewById(R.id.tv_payment_state2);
+        descriptionTextView = findViewById(R.id.tv_description);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        int transactionId = -1;
         // Get start intent
         Intent starterIntent = getIntent();
         // If starter intent has key id
         if (starterIntent.hasExtra(getString(R.string.id))) {
-            int transactionId = starterIntent.getIntExtra(getString(R.string.id));
+            transactionId = starterIntent.getIntExtra(getString(R.string.id), -1);
+        }
 
+        // If intent has no id
+        if (transactionId == -1) {
+            // Do nothing
+            return;
+        } else {
+            // Else set up UI
+            setUpUI(transactionId);
         }
     }
 
@@ -42,7 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private Transaction getTransactionById(int id) {
+    private void setUpUI(int id) {
         // Get db helper
         TransactionDbHelper dbHelper = new TransactionDbHelper(this);
         // Get readable database
@@ -94,7 +115,7 @@ public class DetailsActivity extends AppCompatActivity {
                 int currentId = cursor.getInt(idColIndex);
                 String currentName = cursor.getString(nameColIndex);
                 String currentPhone = cursor.getString(phoneColIndex);
-                int currentUnit = cursor.getInt(unitColIndex);
+                String currentUnit = cursor.getString(unitColIndex);
                 int currentCost = cursor.getInt(costColIndex);
                 int currentTitle = cursor.getInt(titleColIndex);
                 int currentPaymentState = cursor.getInt(paymentStateColIndex);
@@ -102,7 +123,34 @@ public class DetailsActivity extends AppCompatActivity {
                 String currentDate = cursor.getString(dateColIndex);
                 String currentTime = cursor.getString(timeColIndex);
 
+                // Set the content of each text
+                nameTextView.setText(currentName);
+                phoneTextView.setText(currentPhone);
+                unitTextView.setText(currentUnit);
+                costTextView.setText(String.valueOf(currentCost));
+
+                // Check the integer value of currentTitle to set the text accordingly
+                if (currentTitle == TransactionEntry.CUSTOMER) {
+                    titleTextView.setText(getString(R.string.customer));
+                } else {
+                    titleTextView.setText(getString(R.string.service_provider));
+                }
+
+                // Check the integer value of currentPaymentState to set the text accordingly
+                if (currentPaymentState == TransactionEntry.PAID) {
+                    paymentStateTextView.setText(getString(R.string.paid));
+                } else {
+                    paymentStateTextView.setText(getString(R.string.pending));
+                }
+
+                String descString = getString(R.string.created) + " " + currentTime + " " +
+                        currentDate + "\n" + currentDescription;
+                descriptionTextView.setText(descString);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
     }
 }

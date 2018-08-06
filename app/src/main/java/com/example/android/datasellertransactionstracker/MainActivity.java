@@ -94,22 +94,22 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
                 TransactionEntry.TITLE,
                 TransactionEntry.PAYMENT_STATE,
                 TransactionEntry.DESCRIPTION,
-                TransactionEntry.DATE};
+                TransactionEntry.DATE,
+                TransactionEntry.TIME};
 
         // String variable for the selection
         String selection = TransactionEntry.TITLE + " = ?";
         // String array for selectionArgs
         String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
         // String variable for the sort order.
-        String sortOrder = TransactionEntry.DATE + " ASC";
         // Query database and store the cursor in a cursor object;
         Cursor cursor = database.query(TransactionEntry.TABLE_NAME,
                 projections,
                 selection,
-                selectionArgs,
+                selectionArgs ,
                 null,
                 null,
-                sortOrder);
+                null);
 
         // Get the index of each column
         int idColIndex = cursor.getColumnIndex(TransactionEntry._ID);
@@ -124,29 +124,36 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
         int timeColIndex = cursor.getColumnIndex(TransactionEntry.TIME);
 
         try {
-            // Iterate through the cursor if query was successful
-            while (cursor.moveToNext()) {
-                // Get the value in the columns of each row
-                int currentId = cursor.getInt(idColIndex);
-                String currentName = cursor.getString(nameColIndex);
-                String currentPhone = cursor.getString(phoneColIndex);
-                int currentUnit = cursor.getInt(unitColIndex);
-                int currentCost = cursor.getInt(costColIndex);
-                int currentTitle = cursor.getInt(titleColIndex);
-                int currentPaymentState = cursor.getInt(paymentStateColIndex);
-                String currentDescription = cursor.getString(descriptionColIndex);
-                String currentDate = cursor.getString(dateColIndex);
-                String currentTime = cursor.getString(timeColIndex);
+            // If cursor is not null
+            if (cursor != null) {
+                // If there is a first line
+                // Move cursor to that line
+                if(cursor.moveToFirst()) {
+                    do {
+                        // Iterate throught the cursor
+                        // Get the value in the columns of each row
+                        int currentId = cursor.getInt(idColIndex);
+                        String currentName = cursor.getString(nameColIndex);
+                        String currentPhone = cursor.getString(phoneColIndex);
+                        String currentUnit = cursor.getString(unitColIndex);
+                        int currentCost = cursor.getInt(costColIndex);
+                        int currentTitle = cursor.getInt(titleColIndex);
+                        int currentPaymentState = cursor.getInt(paymentStateColIndex);
+                        String currentDescription = cursor.getString(descriptionColIndex);
+                        String currentDate = cursor.getString(dateColIndex);
+                        String currentTime = cursor.getString(timeColIndex);
 
-                // Add a new transaction object to transactions
-                transactions.add(new Transaction(currentName, currentId, currentTitle,
-                        currentPhone, currentUnit, currentCost, currentPaymentState,
-                        currentDescription, currentDate, currentTime));
-
+                        // Add a new transaction object to transactions
+                        transactions.add(new Transaction(currentName, currentId, currentTitle,
+                                currentPhone, currentUnit, currentCost, currentPaymentState,
+                                currentDescription, currentDate, currentTime));
+                    } while (cursor.moveToNext());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            // Close cursor
             cursor.close();
         }
 

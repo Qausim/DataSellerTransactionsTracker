@@ -30,7 +30,7 @@ import com.example.android.datasellertransactionstracker.data.TransactionContrac
  */
 public class TransactionDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "data_business.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public TransactionDbHelper (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,7 +71,7 @@ public class TransactionDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // String contains the SQL statement to delete the transactions table
         String SQL_DELETE_TRANSACTIONS_TABLE =
-                "DROP TABLE IF EXIST " + TransactionEntry.TABLE_NAME + ";";
+                "DROP TABLE IF EXISTS " + TransactionEntry.TABLE_NAME + ";";
         // Execute the statement
         db.execSQL(SQL_DELETE_TRANSACTIONS_TABLE);
 
