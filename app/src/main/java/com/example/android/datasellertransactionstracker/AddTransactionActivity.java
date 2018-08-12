@@ -3,6 +3,7 @@ package com.example.android.datasellertransactionstracker;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -124,7 +125,18 @@ public class AddTransactionActivity extends AppCompatActivity {
             // If save
             case R.id.action_save:
                 // If name was inputed
-                boolean nameEntered = !TextUtils.isEmpty(nameEditText.getText()) && nameEditText
+                String name = nameEditText.getText().toString().trim();
+                String phone = phoneEditText.getText().toString().trim();
+                String unit = unitEditText.getText().toString().trim();
+                int cost = Integer.parseInt(costEditText.getText().toString().trim());
+                String description = descriptionEditText.getText().toString();
+
+                // Insert new entry into database
+                insertIntoDatabase(name, phone, unit, cost, description, mTitle, mPaymentState);
+
+
+                /**
+                 * boolean nameEntered = !TextUtils.isEmpty(nameEditText.getText()) && nameEditText
                         .getText().toString().trim() != "";
                 // If phone number was entered
                 boolean phoneEntered = !TextUtils.isEmpty(phoneEditText.getText()) && phoneEditText
@@ -160,12 +172,13 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                     } catch (Exception e){
                         Toast.makeText(getApplicationContext(), getString(R.string
-                                .check_type_error_message), Toast.LENGTH_SHORT).show();
+                                .), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string
                             .populate_fields_toast_message), Toast.LENGTH_LONG).show();
                 }
+                 */
                 break;
             case R.id.action_cancel:
                 finish();
@@ -205,8 +218,9 @@ public class AddTransactionActivity extends AppCompatActivity {
         values.put(TransactionEntry.TIME, timeString);
 
         // Insert into database
-        long newRowId = database.insert(TransactionEntry.TABLE_NAME, null, values);
+        Uri newRowUri = getContentResolver().insert(TransactionEntry.CONTENT_URI, values);
 
+        /**
         // If insert was not successfully
         if (newRowId < 0) {
             // Make a toast that insertion was not successful
@@ -214,10 +228,9 @@ public class AddTransactionActivity extends AppCompatActivity {
                             .database_insert_error_message), Toast.LENGTH_LONG).show();
         } else {// Else if successful
             /*Toast.makeText(getApplicationContext(), getString(R.string
-                    .database_insert_success_message), Toast.LENGTH_LONG).show(); */
+                    .database_insert_success_message), Toast.LENGTH_LONG).show();
+         */
             // Go back home
             finish();
-
-        }
     }
 }

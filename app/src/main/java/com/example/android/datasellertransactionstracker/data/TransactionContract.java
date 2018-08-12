@@ -20,10 +20,9 @@ package com.example.android.datasellertransactionstracker.data;
  * Created by Qausim on 8/3/2018.
  */
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
-
-import java.net.PortUnreachableException;
-import java.net.SocketTimeoutException;
 
 /**
  * API contract class for the transaction tracker app.*/
@@ -31,9 +30,28 @@ public final class TransactionContract {
     // To prevent anyone from accidentally instantiating the class give it an empty constructor.
     private void TrasactionContract() {}
 
+    // The content authority
+    public static final String CONTENT_AUTHORITY = "com.example.android.datasellertransactionstracker";
+
+    // The base content uri
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    // The path to the transactions table
+    public static final String PATH_TRANSACTIONS = "transactions";
+
     // Inner class implements BaseColumns, contains constant values for the transaction table name and
     // its fields
     public static final class TransactionEntry implements BaseColumns {
+
+        // MIME type for the whole table and a specific row
+        public static final String TRANSACTIONS_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                "/" + CONTENT_AUTHORITY + "/" + PATH_TRANSACTIONS;
+        public static final String TRANSACTIONS_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                "/" + CONTENT_AUTHORITY + "/" + PATH_TRANSACTIONS;
+
+        // The content uri
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI,
+                PATH_TRANSACTIONS);
         // The table name. The table has fields ID, Phone, Amount, Title, Paid, Description
         // and date.
         public static final String TABLE_NAME = "transactions";

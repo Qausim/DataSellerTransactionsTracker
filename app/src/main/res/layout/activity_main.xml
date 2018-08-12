@@ -6,21 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.android.datasellertransactionstracker.MainActivity">
 
-    <!--<EditText
-        android:id="@+id/search_field"
+    <ListView
+        android:id="@+id/transaction_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="@integer/search_field_max_lines"
-        android:hint="@string/search"
-        android:textSize="22sp"
-        android:layout_margin="10dp"
-        android:background="@drawable/search_background"/>-->
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_transactions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"></ListView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_transaction"

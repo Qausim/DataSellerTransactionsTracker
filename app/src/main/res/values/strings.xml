@@ -5,25 +5,22 @@
     <string name="search_by_name">Search by name</string>
     <string name="search_by_number">Search by number</string>
     <string name="delete_entries">Delete all entries</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="paid">Paid</string>
     <string name="pending">Pending</string>
     <string name="add_transaction_label">Add Transaction</string>
     <string name="id_hint">Input name (else phone)</string>
     <string name="phone_hint">Input phone number</string>
     <string name="title_hint">Select title</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="check_type_error_message">Please check your input for the fields. One or more
-    is not the supported input type.</string>
     <string name="database_insert_error_message">Error inserting into database!</string>
     <string name="database_insert_success_message">Entry made successfully!</string>
-    <string name="populate_fields_toast_message">Please populate all input fields and click a
-    valid selection from each dropdown menu</string>
     <string name="customer">Customer</string>
     <string name="service_provider">Service provider</string>
     <string name="unit_hint">Input unit</string>
     <string name="cost_hint">Input cost</string>
     <string name="payment_hint">Select payment state</string>
+    <string name="description_hint">Add comments about transaction</string>
     <string name="id">id</string>
     <string name="created">Created: </string>
     <string name="tv_id">Customers ID: </string>
@@ -34,5 +31,15 @@
     <string name="tv_payment_state">Payment: </string>
     <string name="tv_description">Description: </string>
     <string name="details_activity_label">Details</string>
-    <string name="description_hint">Add notes about tranasaction</string>
+    <string name="empty_name_error_message">Name field cannot be empty!</string>
+    <string name="empty_phone_error_message">Phone field should not be empty!</string>
+    <string name="empty_unit_error_message">Unit field cannot be empty!</string>'
+    <string name="wrong_input_type_error_message">Please ensure value inputs for both phone and cost fields!</string>
+    <string name="wrong_phone_input_error_message">Please enter a valid phone number in the phone field</string>
+    <string name="empty_cost_field_error_message">Cost field cannot be empty</string>
+    <string name="wrong_cost_input_error_message">Cost field requires an integer input.</string>
+    <string name="transaction_successful_comment">Transaction Successful.</string>
+    <string name="bought">Bought</string>
+    <string name="yet_to_pay">and is yet to pay.</string>
+    <string name="has_paid">and has paid</string>
 </resources>

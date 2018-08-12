@@ -51,10 +51,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Get the paymentState
         switch (currentTransaction.getPaymentState()) {
             case TransactionEntry.PAID:
-                holder.paymentStateTextView.setText(MainActivity.paid);
+                //holder.paymentStateTextView.setText(MainActivity.paid);
                 break;
             case TransactionEntry.PENDING:
-                holder.paymentStateTextView.setText(MainActivity.pending);
+                //holder.paymentStateTextView.setText(MainActivity.pending);
         }
 
         // Set the content of the timeTextView
@@ -73,12 +73,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         public TransactionViewHolder(View itemView) {
             super(itemView);
+            /*
             nameTextView = itemView.findViewById(R.id.tv_name);
             costTextView = itemView.findViewById(R.id.tv_cost);
             paymentStateTextView = itemView.findViewById(R.id.tv_payment_state);
             timeTextView = itemView.findViewById(R.id.tv_time);
             dateTextView = itemView.findViewById(R.id.tv_date);
             itemView.setOnClickListener(this);
+            */
         }
 
         @Override
