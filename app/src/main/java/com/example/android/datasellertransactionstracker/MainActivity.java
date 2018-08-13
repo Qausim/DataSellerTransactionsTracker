@@ -1,15 +1,14 @@
 package com.example.android.datasellertransactionstracker;
 
-import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.SearchRecentSuggestionsProvider;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,25 +19,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.android.datasellertransactionstracker.data.TransactionDbHelper;
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // Member variable for the RecyclerView;
-    //private RecyclerView mRecylerView;
     // Member variable for the Adapter
-    private CursorAdapter mAdapter;
-    // Member variable for LayoutManager
-    RecyclerView.LayoutManager mLayoutManager;
+    private TransactionCursorAdapter mAdapter;
     // Member variable for the floatingActionButton
     private FloatingActionButton floatingActionButton;
     // Member variable of the database helper class
-    //private TransactionDbHelper mDbHelper;
 
     // Cursor loader id for transactions
     private final int TRANSACTIONS_LOADER_ID = 15;
@@ -55,26 +46,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mRecylerView = findViewById(R.id.rv_transactions);
-        // The recycler view size may change
-        //mRecylerView.setHasFixedSize(false);
-        mLayoutManager = new LinearLayoutManager(this);
-        //mRecylerView.setLayoutManager(mLayoutManager);
         floatingActionButton = findViewById(R.id.fab_add_transaction);
 
         transactionListView = findViewById(R.id.transaction_list_view);
+        mAdapter = new TransactionCursorAdapter(this, null);
         transactionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Uri itemUri = ContentUris.withAppendedId(TransactionEntry.CONTENT_URI, id);
+                Intent detailsIntent = new Intent(MainActivity.this,
+                        DetailsActivity.class);
+                detailsIntent.setData(itemUri);
+                startActivity(detailsIntent);
             }
         });
-
-        //transactions = new ArrayList<>();
-        //mDbHelper = new TransactionDbHelper(this);
-        //paid = getString(R.string.paid);
-        //pending = getString(R.string.pending);
-        mAdapter = new TransactionCursorAdapter(this, null);
         transactionListView.setAdapter(mAdapter);
 
         // Set click listener on the floatingActionButton
@@ -88,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-        getSupportLoaderManager().initLoader(TRANSACTIONS_LOADER_ID, null, null);
+        getSupportLoaderManager().initLoader(TRANSACTIONS_LOADER_ID, null, this);
     }
 
 
@@ -117,23 +102,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case TRANSACTIONS_LOADER_ID:
+                String[] projection = {
+                        TransactionEntry._ID,
+                        TransactionEntry.NAME,
+                        TransactionEntry.UNIT,
+                        TransactionEntry.PAYMENT_STATE
+                };
+                String selection = TransactionEntry.TITLE + " = ?";
+                String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
+                String sortBy = TransactionEntry._ID + " DESC";
 
+                return new CursorLoader(getApplicationContext(),
+                        TransactionEntry.CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        sortBy);
         }
-        String[] projection = {
-                TransactionEntry.NAME,
-                TransactionEntry.UNIT,
-                TransactionEntry.PAYMENT_STATE
-        };
-        String selection = TransactionEntry.TITLE + " = ?";
-        String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
-        String sortBy = TransactionEntry._ID + " ASC";
-
-        return new CursorLoader(this,
-                TransactionEntry.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                sortBy);
+        return null;
     }
 
     @Override

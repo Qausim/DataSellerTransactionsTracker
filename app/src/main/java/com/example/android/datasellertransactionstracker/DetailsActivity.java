@@ -1,23 +1,33 @@
 package com.example.android.datasellertransactionstracker;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
-import com.example.android.datasellertransactionstracker.data.TransactionDbHelper;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    // Log tag for the activity
+    private static final String TAG = DetailsActivity.class.getSimpleName();
+    // UI component objects
     private TextView nameTextView, phoneTextView, titleTextView, unitTextView, costTextView,
     paymentStateTextView, descriptionTextView;
+
+    // The Uri of this particular entry will be contained in
+    Uri itemUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,47 +41,89 @@ public class DetailsActivity extends AppCompatActivity {
         paymentStateTextView = findViewById(R.id.tv_payment_state2);
         descriptionTextView = findViewById(R.id.tv_description);
 
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        int transactionId = -1;
-        // Get start intent
         Intent starterIntent = getIntent();
-        // If starter intent has key id
-        if (starterIntent.hasExtra(getString(R.string.id))) {
-            transactionId = starterIntent.getIntExtra(getString(R.string.id), -1);
-        }
+        itemUri = starterIntent.getData(); // Stores the Uri of the item to be displayed.
+    }
 
-        // If intent has no id
-        if (transactionId == -1) {
-            // Do nothing
-            return;
-        } else {
-            // Else set up UI
-            setUpUI(transactionId);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setUpUI();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details_activity_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
+        // Get the id of the option clicked
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                // If the user chose to delete
+                // Create an alert to ascertain his/her choice
+                AlertDialog.Builder alertDialogBuider;
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    alertDialogBuider = new AlertDialog.Builder(this,
+                            android.R.style.Theme_DeviceDefault_Light_Dialog);
+                } else {
+                    alertDialogBuider = new AlertDialog.Builder(this);
+                }
+                alertDialogBuider
+                        // Set the title of the dialog
+                        .setTitle(R.string.delete_entry_title)
+                        // Set the message of the dialog
+                        .setMessage(R.string.delete_entry)
+                        // Set the negative option of the dialog and its implementation
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing
+                                return;
+                            }
+                        })
+                        // Set the positive option and proceed with deletion
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int rowsDeleted = getContentResolver().delete(itemUri,
+                                        null,
+                                        null);
+                                // Go back
+                                finish();
+                            }
+                        }).show();
+
+                break;
+            case R.id.action_edit:
+                // If the user chose to edit
+                // Then start the AddTransactionActivity as an editor activity
+                Intent editorStarterIntent = new Intent(DetailsActivity.this, AddTransactionActivity
+                .class);
+                // Add the item's Uri to the intent
+                editorStarterIntent.setData(itemUri);
+                startActivity(editorStarterIntent);
+                break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpUI(int id) {
-        // Get db helper
-        TransactionDbHelper dbHelper = new TransactionDbHelper(this);
-        // Get readable database
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
+    private void setUpUI() {
+        Log.d(TAG, "Row Uri" + itemUri);
         // String array for the projections
         String[] projections = {
-                TransactionEntry._ID,
                 TransactionEntry.NAME,
                 TransactionEntry.PHONE,
                 TransactionEntry.UNIT,
@@ -83,21 +135,13 @@ public class DetailsActivity extends AppCompatActivity {
                 TransactionEntry.DESCRIPTION
         };
 
-        // Specify selection
-        String selection = TransactionEntry._ID + " = ?";
-        // Specify selection args
-        String[] selectionArgs = {String.valueOf(id)};
-        // Query database using id
-        Cursor cursor = database.query(TransactionEntry.TABLE_NAME,
+        Cursor cursor = getContentResolver().query(itemUri,
                 projections,
-                selection,
-                selectionArgs,
                 null,
                 null,
                 null);
 
         // Get the index of each column
-        int idColIndex = cursor.getColumnIndex(TransactionEntry._ID);
         int nameColIndex = cursor.getColumnIndex(TransactionEntry.NAME);
         int phoneColIndex = cursor.getColumnIndex(TransactionEntry.PHONE);
         int unitColIndex = cursor.getColumnIndex(TransactionEntry.UNIT);
@@ -112,7 +156,6 @@ public class DetailsActivity extends AppCompatActivity {
             // Iterate through the cursor
             while (cursor.moveToNext()) {
                 // Get the value in the columns of each row
-                int currentId = cursor.getInt(idColIndex);
                 String currentName = cursor.getString(nameColIndex);
                 String currentPhone = cursor.getString(phoneColIndex);
                 String currentUnit = cursor.getString(unitColIndex);
@@ -143,8 +186,8 @@ public class DetailsActivity extends AppCompatActivity {
                     paymentStateTextView.setText(getString(R.string.pending));
                 }
 
-                String descString = getString(R.string.created) + " " + currentTime + " " +
-                        currentDate + "\n" + currentDescription;
+                String descString = getString(R.string.created_updated) + " " + currentTime + ", " +
+                        currentDate + "\n\n" + currentDescription;
                 descriptionTextView.setText(descString);
             }
         } catch (Exception e) {

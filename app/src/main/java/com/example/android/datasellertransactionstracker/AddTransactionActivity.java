@@ -2,11 +2,11 @@ package com.example.android.datasellertransactionstracker;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
 import com.example.android.datasellertransactionstracker.data.TransactionDbHelper;
@@ -33,10 +32,18 @@ public class AddTransactionActivity extends AppCompatActivity {
     private int mTitle;
     // Integer variable stores the state of the payment state spinner selected.
     private int mPaymentState;
+
+    // Contains the item's Uri when we are editing
+    Uri itemUri;
+    // Boolean variable checks whether we are adding an entry or updating
+    boolean editing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
+
+        // editing is false by default
+        editing = false;
         // Bind the UI components
         nameEditText = findViewById(R.id.ed_name);
         phoneEditText = findViewById(R.id.ed_phone);
@@ -75,8 +82,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                     // If service provider
                     // Set mTitle to 2
                     mTitle = TransactionEntry.SERVICE_PROVIDER;
-                } else {// Else set mTitle to 0
-                    mTitle = 0;
                 }
             }
 
@@ -99,8 +104,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                     mPaymentState = TransactionEntry.PAID;
                 } else if (selection == getString(R.string.pending)) {// If payment is pending
                     mPaymentState = TransactionEntry.PENDING;
-                } else {// Else
-                    mPaymentState = 0;
                 }
             }
 
@@ -110,6 +113,64 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         });
 
+        // Set the title of the activity
+        setTitle(R.string.add_transaction_label);
+        // Get the intent that started this activity
+        Intent starterIntent = getIntent();
+        // Get the item's Uri
+        itemUri = starterIntent.getData();
+        // If the item's Uri is not null
+        if (itemUri != null) {
+            // Then we are editing
+            editing = true;
+            // Set activity title to edit transaction and populate the UI
+            setTitle(R.string.edit_transaction_label);
+            populateUIComponents(itemUri);
+        }
+    }
+
+    private void populateUIComponents(Uri itemUri) {
+        // Query the database
+        Cursor cursor = getContentResolver().query(itemUri,
+                null, // Get all columns
+                null,
+                null,
+                null);
+        // Move to the item's row on table
+        cursor.moveToFirst();
+        // Get all data from the cursor
+        String name = cursor.getString(cursor.getColumnIndex(TransactionEntry.NAME));
+        String phone = cursor.getString(cursor.getColumnIndex(TransactionEntry.PHONE));
+        int paymentState = cursor.getInt(cursor.getColumnIndex(TransactionEntry.PAYMENT_STATE));
+        int title = cursor.getInt(cursor.getColumnIndex(TransactionEntry.TITLE));
+        String unit = cursor.getString(cursor.getColumnIndex(TransactionEntry.UNIT));
+        int cost = cursor.getInt(cursor.getColumnIndex(TransactionEntry.COST));
+        String description = cursor.getString(cursor.getColumnIndex(TransactionEntry.DESCRIPTION));
+
+        // Set the name
+        nameEditText.setText(name);
+        // Set the phone
+        phoneEditText.setText(phone);
+        // Set the description
+        descriptionEditText.setText(description);
+        // Set the unit
+        unitEditText.setText(unit);
+        // Set the cost
+        costEditText.setText(String.valueOf(cost));
+
+        // Set the spinners' default selections based on existing data
+        if (paymentState == TransactionEntry.PAID) {
+            mPaymentStateSpinner.setSelection(paymentStateSpinnerAdapter
+                    .getPosition(getString(R.string.paid)));
+        } else {
+            mPaymentStateSpinner.setSelection(paymentStateSpinnerAdapter
+                    .getPosition(getString(R.string.pending)));
+        }
+        if (title == TransactionEntry.CUSTOMER) {
+            mTitleSpinner.setSelection(titleSpinnerAdapter.getPosition(R.string.customer));
+        } else {
+            mTitleSpinner.setSelection(titleSpinnerAdapter.getPosition(R.string.service_provider));
+        }
     }
 
     @Override
@@ -124,7 +185,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // If save
             case R.id.action_save:
-                // If name was inputed
                 String name = nameEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
                 String unit = unitEditText.getText().toString().trim();
@@ -133,52 +193,6 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                 // Insert new entry into database
                 insertIntoDatabase(name, phone, unit, cost, description, mTitle, mPaymentState);
-
-
-                /**
-                 * boolean nameEntered = !TextUtils.isEmpty(nameEditText.getText()) && nameEditText
-                        .getText().toString().trim() != "";
-                // If phone number was entered
-                boolean phoneEntered = !TextUtils.isEmpty(phoneEditText.getText()) && phoneEditText
-                        .getText().toString().trim() != "";
-                // If unit was inputed
-                boolean unitEntered = !TextUtils.isEmpty(unitEditText.getText()) && unitEditText
-                        .getText().toString().trim() != "";
-                // If cost was entered
-                boolean costEntered = !TextUtils.isEmpty(costEditText.getText()) && costEditText
-                        .getText().toString().trim() != "";
-                // If description was entered
-                boolean descriptionEntered = !TextUtils.isEmpty(descriptionEditText.getText()) &&
-                        descriptionEditText.getText().toString().trim() != "";
-                // If payment state selected
-                boolean paymentStateSelected = mPaymentState == TransactionEntry.PENDING ||
-                        mPaymentState == TransactionEntry.PAID;
-                // If title selected
-                boolean titleSelected = mTitle == TransactionEntry.CUSTOMER || mTitle ==
-                        TransactionEntry.SERVICE_PROVIDER;
-                // If all above is true
-                if (nameEntered && phoneEntered && unitEntered && costEntered && descriptionEntered &&
-                        paymentStateSelected && titleSelected) {
-                    try {
-                        // Get the various components
-                        String name = nameEditText.getText().toString().trim();
-                        String phone = phoneEditText.getText().toString().trim();
-                        String unit = unitEditText.getText().toString().trim();
-                        int cost = Integer.parseInt(costEditText.getText().toString().trim());
-                        String description = descriptionEditText.getText().toString();
-
-                        // Insert new entry into database
-                        insertIntoDatabase(name, phone, unit, cost, description, mTitle, mPaymentState);
-
-                    } catch (Exception e){
-                        Toast.makeText(getApplicationContext(), getString(R.string
-                                .), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string
-                            .populate_fields_toast_message), Toast.LENGTH_LONG).show();
-                }
-                 */
                 break;
             case R.id.action_cancel:
                 finish();
@@ -190,10 +204,10 @@ public class AddTransactionActivity extends AppCompatActivity {
     private void insertIntoDatabase(String name, String phone, String unit, int cost, String description,
                                    int title, int paymentState) {
         // Get current date
-        Date date = Calendar.getInstance().getTime();
+        Date date = new Date();
         // Set simple date format for both time and date
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM a");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy");
 
         // Format the time and date
         String timeString = timeFormat.format(date);
@@ -217,19 +231,15 @@ public class AddTransactionActivity extends AppCompatActivity {
         values.put(TransactionEntry.DATE, dateString);
         values.put(TransactionEntry.TIME, timeString);
 
-        // Insert into database
-        Uri newRowUri = getContentResolver().insert(TransactionEntry.CONTENT_URI, values);
-
-        /**
-        // If insert was not successfully
-        if (newRowId < 0) {
-            // Make a toast that insertion was not successful
-            Toast.makeText(getApplicationContext(), getString(R.string
-                            .database_insert_error_message), Toast.LENGTH_LONG).show();
-        } else {// Else if successful
-            /*Toast.makeText(getApplicationContext(), getString(R.string
-                    .database_insert_success_message), Toast.LENGTH_LONG).show();
-         */
+        // Insert into database if editing otherwise update
+        if (editing) {
+            int rowsUpdated = getContentResolver().update(itemUri,
+                    values,
+                    null
+                    ,null);
+        } else {
+            Uri newRowUri = getContentResolver().insert(TransactionEntry.CONTENT_URI, values);
+        }
             // Go back home
             finish();
     }

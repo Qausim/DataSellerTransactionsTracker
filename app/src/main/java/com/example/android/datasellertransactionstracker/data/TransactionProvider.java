@@ -85,7 +85,7 @@ public class TransactionProvider extends ContentProvider {
             // Else if the a specific row is queried
             case TRANSACTIONS_ID:
                 // Its selection is then the id column
-                selection = TransactionEntry._ID;
+                selection = TransactionEntry._ID + " = ?";
                 // And its id is the value we seek
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 // We query thus
@@ -174,7 +174,7 @@ public class TransactionProvider extends ContentProvider {
             return null;
         }
         if (TextUtils.isEmpty(comments)) {
-            comments = Resources.getSystem().getString(R.string.transaction_successful_comment);
+            comments = getContext().getString(R.string.transaction_successful_comment);
             values.remove(TransactionEntry.DESCRIPTION);
             values.put(TransactionEntry.DESCRIPTION, comments);
         }

@@ -17,8 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddTransactionActivity"
-            android:label="@string/add_transaction_label" />
+            android:name=".AddTransactionActivity" />
         <activity android:name=".DetailsActivity"
             android:parentActivityName=".MainActivity"
             android:label="@string/details_activity_label">
