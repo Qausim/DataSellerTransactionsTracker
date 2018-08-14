@@ -5,7 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.datasellertransactionstracker.DetailsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/details_activity_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,16 +19,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_id"/>
         <TextView
             android:id="@+id/tv_name2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -43,16 +48,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_phone"/>
         <TextView
             android:id="@+id/tv_phone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -68,16 +77,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_title"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -93,16 +106,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_unit"/>
         <TextView
             android:id="@+id/tv_unit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -118,16 +135,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_cost"/>
         <TextView
             android:id="@+id/tv_cost2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -143,16 +164,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="2"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_payment_state"/>
         <TextView
             android:id="@+id/tv_payment_state2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="center_vertical|start"
             android:layout_weight="4"
+            android:fontFamily="sans-serif"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
             android:text=""
             android:textSize="20sp"/>
     </LinearLayout>
@@ -170,6 +195,8 @@
             android:layout_height="0dp"
             android:layout_gravity="top|start"
             android:layout_weight="1"
+            android:fontFamily="serif-monospace"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:textSize="16sp"
             android:text="@string/tv_description"/>
         <ScrollView
@@ -183,8 +210,9 @@
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                style="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textSize="20sp"/>
         </ScrollView>
     </LinearLayout>

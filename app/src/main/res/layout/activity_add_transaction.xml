@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.datasellertransactionstracker.AddTransactionActivity">
+    tools:context="com.example.android.datasellertransactionstracker.AddTransactionActivity"
+    android:background="@color/details_activity_background">
 
     <EditText
         android:id="@+id/ed_name"
@@ -12,6 +13,8 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:maxLines="1"
+        android:fontFamily="serif-monospace"
+        style="@style/Widget.AppCompat.EditText"
         android:hint="@string/id_hint"
         android:inputType="textCapWords"
         android:layout_marginTop="20dp"
@@ -25,6 +28,8 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:maxLines="1"
+        android:fontFamily="serif-monospace"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -41,7 +46,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textAlignment="viewStart"
-        android:autofillHints="@string/title_hint"
+        android:fontFamily="serif-monospace"
         android:spinnerMode="dropdown"
         android:gravity="start" />
 
@@ -51,6 +56,8 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:maxLines="1"
+        android:fontFamily="serif-monospace"
+        style="@style/Widget.AppCompat.EditText"
         android:hint="@string/unit_hint"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
@@ -63,6 +70,8 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:maxLines="1"
+        android:fontFamily="serif-monospace"
+        style="@style/Widget.AppCompat.EditText"
         android:hint="@string/cost_hint"
         android:inputType="number"
         android:layout_marginTop="20dp"
@@ -75,9 +84,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:fontFamily="serif-monospace"
         android:spinnerMode="dropdown"
         android:textAlignment="viewStart"
-        android:autofillHints="@string/payment_hint"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -89,6 +98,10 @@
         android:layout_height="0dp"
         android:layout_weight="5"
         android:textSize="22sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="serif-monospace"
+        style="@style/Widget.AppCompat.EditText"
         android:hint="@string/description_hint"
         android:textAlignment="viewStart"
         android:gravity="start" />

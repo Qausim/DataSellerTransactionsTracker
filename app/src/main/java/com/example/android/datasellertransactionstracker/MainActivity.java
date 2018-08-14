@@ -2,23 +2,24 @@ package com.example.android.datasellertransactionstracker;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.datasellertransactionstracker.data.TransactionContract.*;
 
@@ -86,14 +87,47 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search_by_name:
-                return true;
-            case R.id.action_search_by_number:
-                return true;
+            //case R.id.action_search_by_name:
+                //return true;
+            //case R.id.action_search_by_number:
+                //return true;
             case R.id.action_delete_entries:
-                return true;
-            case R.id.action_view_purchase_history:
-                return true;
+                // If user opts to delete all entries
+                // Build an alert dialog to ascertain this option
+                AlertDialog.Builder alertBuilder;
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    alertBuilder = new AlertDialog.Builder(this, android.R.style
+                            .Theme_DeviceDefault_Light_Dialog);
+                } else {
+                    alertBuilder = new AlertDialog.Builder(this);
+                }
+                alertBuilder
+                        // Set the alert title and message using string resources
+                        .setTitle(R.string.delete_entries_title)
+                        .setMessage(R.string.delete_entries)
+                        // Set the posititve and negative buttons and its implementations
+                        .setPositiveButton(android.R.string.yes, new DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Then proceed with deletion
+                                int rowsDeleted = getContentResolver().delete(TransactionEntry
+                                        .CONTENT_URI, // The addressed Uri
+                                        null, // Select all
+                                        null);
+                                // Inform the user of the number of rows deleted
+                                Toast.makeText(getApplicationContext(), rowsDeleted + " " +
+                                        R.string.entries_deleted_toast_message, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }).setNegativeButton(android.R.string.no, new DialogInterface
+                        .OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // If the deletion is canceled then do nothing and return
+                        return;
+                    }
+                }).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -106,17 +140,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         TransactionEntry._ID,
                         TransactionEntry.NAME,
                         TransactionEntry.UNIT,
-                        TransactionEntry.PAYMENT_STATE
+                        TransactionEntry.PAYMENT_STATE,
+                        TransactionEntry.TITLE
                 };
-                String selection = TransactionEntry.TITLE + " = ?";
-                String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
+                //String selection = TransactionEntry.TITLE + " = ?";
+                //String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
                 String sortBy = TransactionEntry._ID + " DESC";
 
                 return new CursorLoader(getApplicationContext(),
                         TransactionEntry.CONTENT_URI,
                         projection,
-                        selection,
-                        selectionArgs,
+                        null,
+                        null,
                         sortBy);
         }
         return null;

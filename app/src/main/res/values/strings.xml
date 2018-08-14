@@ -4,10 +4,12 @@
     <string name="view_purchase_history">View Purchase History</string>
     <string name="search_by_name">Search by name</string>
     <string name="search_by_number">Search by number</string>
+    <string name="delete_entries_option">Delete entries</string>
     <string name="delete_entries_title">Delete Entries</string>
     <string name="delete_entries">Are you sure you want to delete all entries</string>
     <string name="delete_entry_title">Delete Entry</string>
     <string name="delete_entry">Are you sure you want to delete this entry?</string>
+    <string name="entries_deleted_toast_message">entry(ies) deleted.</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="paid">Paid</string>
@@ -27,7 +29,7 @@
     <string name="description_hint">Add comments about transaction</string>
     <string name="id">id</string>
     <string name="created_updated">Created/Updated: </string>
-    <string name="created"></string>
+    <string name="created">Created: </string>
     <string name="tv_id">Customers ID: </string>
     <string name="tv_phone">Phone: </string>
     <string name="tv_title">Title: </string>
@@ -47,6 +49,9 @@
     <string name="bought">Bought</string>
     <string name="yet_to_pay">and is yet to pay.</string>
     <string name="has_paid">and has paid</string>
+    <string name="seller_bought">You bought</string>
+    <string name="seller_has_paid">and have paid</string>
+    <string name="seller_yet_to_pay">and are yet to pay</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
 </resources>
