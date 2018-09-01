@@ -171,6 +171,8 @@ public class AddTransactionActivity extends AppCompatActivity {
         } else {
             mTitleSpinner.setSelection(titleSpinnerAdapter.getPosition(R.string.service_provider));
         }
+        // Close the cursor
+        cursor.close();
     }
 
     @Override
@@ -185,26 +187,33 @@ public class AddTransactionActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // If save
             case R.id.action_save:
+                // Get all inputs into the fields
                 String name = nameEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
                 String unit = unitEditText.getText().toString().trim();
                 int cost = Integer.parseInt(costEditText.getText().toString().trim());
                 String description = descriptionEditText.getText().toString();
 
-                // Insert new entry into database
+                // Insert new entry into database using inputs into the fields
                 insertIntoDatabase(name, phone, unit, cost, description, mTitle, mPaymentState);
                 break;
             case R.id.action_cancel:
+                // If s/he chose to cancel editing
+                // Then navigate up the stack of activities
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles insertion into the database
+     * */
     private void insertIntoDatabase(String name, String phone, String unit, int cost, String description,
                                    int title, int paymentState) {
         // Get current date
-        Date date = new Date();
+        long dateLong = System.currentTimeMillis();
+        Date date = new Date(dateLong);
         // Set simple date format for both time and date
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM a");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy");
@@ -240,7 +249,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         } else {
             Uri newRowUri = getContentResolver().insert(TransactionEntry.CONTENT_URI, values);
         }
-            // Go back home
+        // Then navigate up the stack of activities
             finish();
     }
 }

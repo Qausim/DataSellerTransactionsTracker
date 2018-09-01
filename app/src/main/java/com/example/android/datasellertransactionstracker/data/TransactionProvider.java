@@ -75,7 +75,7 @@ public class TransactionProvider extends ContentProvider {
         // Cursor object to hold values required
         Cursor cursor;
 
-        // Make decisions on how access the database using the match
+        // Make decisions on how to access the database using the match
         switch (match) {
             // If the whole table is to queried
             case TRANSACTIONS:

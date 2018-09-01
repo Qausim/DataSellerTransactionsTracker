@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,30 +38,42 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     // A list view object
     private ListView transactionListView;
-
-    // Container for Transaction objects;
-    //ArrayList<Transaction> transactions;
-    //public static String paid, pending;
+    // A LinearLayout object
+    LinearLayout emptyListLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Bind the UI components
         floatingActionButton = findViewById(R.id.fab_add_transaction);
-
         transactionListView = findViewById(R.id.transaction_list_view);
+        emptyListLayout = findViewById(R.id.empty_list_layout);
+
+        // Set the empty view on the listview
+        transactionListView.setEmptyView(emptyListLayout);
+
+        // Instantiate th cursor adapter
         mAdapter = new TransactionCursorAdapter(this, null);
+
+        // Set on item click listener on listView
         transactionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Create item Uri from item id
                 Uri itemUri = ContentUris.withAppendedId(TransactionEntry.CONTENT_URI, id);
+                // Declare an intent for navigating to the DetailsActivity
+                // Set the item uri as data on the intent
                 Intent detailsIntent = new Intent(MainActivity.this,
                         DetailsActivity.class);
+                // Set the item uri as data on the intent
                 detailsIntent.setData(itemUri);
+                // Start DetailsActivity
                 startActivity(detailsIntent);
             }
         });
+        // Set the cursor adapter on listView
         transactionListView.setAdapter(mAdapter);
 
         // Set click listener on the floatingActionButton
@@ -74,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
+        // Initialize CursorLoader
         getSupportLoaderManager().initLoader(TRANSACTIONS_LOADER_ID, null, this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,8 +147,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Check the value of id if it is same as TRANSACTIONS_LOADER_ID
         switch (id) {
             case TRANSACTIONS_LOADER_ID:
+                // Set the columns to return
                 String[] projection = {
                         TransactionEntry._ID,
                         TransactionEntry.NAME,
@@ -145,8 +160,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 };
                 //String selection = TransactionEntry.TITLE + " = ?";
                 //String[] selectionArgs = {String.valueOf(TransactionEntry.CUSTOMER)};
+                // Sort by their id in descending order
                 String sortBy = TransactionEntry._ID + " DESC";
 
+                // Return a CursorLoader object
                 return new CursorLoader(getApplicationContext(),
                         TransactionEntry.CONTENT_URI,
                         projection,
@@ -159,11 +176,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap adapter on the cursor returned from loading
         mAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        // When loader is reset, set adapter on a null data
         mAdapter.swapCursor(null);
     }
 }

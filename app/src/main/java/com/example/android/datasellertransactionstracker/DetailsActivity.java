@@ -33,6 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        // Bind UI components to their respective objects
         nameTextView = findViewById(R.id.tv_name2);
         phoneTextView = findViewById(R.id.tv_phone);
         titleTextView = findViewById(R.id.tv_title);
@@ -41,18 +42,22 @@ public class DetailsActivity extends AppCompatActivity {
         paymentStateTextView = findViewById(R.id.tv_payment_state2);
         descriptionTextView = findViewById(R.id.tv_description);
 
-
+        // Set navigate home action bar arrow
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        // Get the intent that started the activity
         Intent starterIntent = getIntent();
-        itemUri = starterIntent.getData(); // Stores the Uri of the item to be displayed.
+        // Get the item uri from the intent
+        itemUri = starterIntent.getData();
     }
 
     @Override
     protected void onStart() {
+        // In onStart setup the UI with data for each components
+        // So when user navigates away and back changes to the data would be effected in the UI
         super.onStart();
         setUpUI();
     }
@@ -67,6 +72,7 @@ public class DetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Get the id of the option clicked
         switch (item.getItemId()) {
+
             case R.id.action_delete:
                 // If the user chose to delete
                 // Create an alert to ascertain his/her choice
@@ -106,13 +112,16 @@ public class DetailsActivity extends AppCompatActivity {
             case R.id.action_edit:
                 // If the user chose to edit
                 // Then start the AddTransactionActivity as an editor activity
-                Intent editorStarterIntent = new Intent(DetailsActivity.this, AddTransactionActivity
-                .class);
+                Intent editorStarterIntent = new Intent(DetailsActivity.this,
+                        AddTransactionActivity.class);
                 // Add the item's Uri to the intent
                 editorStarterIntent.setData(itemUri);
+                // Start AddTransactionActivity
                 startActivity(editorStarterIntent);
                 break;
             case android.R.id.home:
+                // If option chosen is to go home
+                // Then navigate up the stack of activities
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
 
@@ -120,6 +129,10 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * Handles UI updates of UI components with existing data in the database
+     * */
     private void setUpUI() {
         Log.d(TAG, "Row Uri" + itemUri);
         // String array for the projections
@@ -134,7 +147,7 @@ public class DetailsActivity extends AppCompatActivity {
                 TransactionEntry.TITLE,
                 TransactionEntry.DESCRIPTION
         };
-
+        // Query the db for data
         Cursor cursor = getContentResolver().query(itemUri,
                 projections,
                 null,
@@ -166,7 +179,7 @@ public class DetailsActivity extends AppCompatActivity {
                 String currentDate = cursor.getString(dateColIndex);
                 String currentTime = cursor.getString(timeColIndex);
 
-                // Set the content of each text
+                // Set the content of each TextView
                 nameTextView.setText(currentName);
                 phoneTextView.setText(currentPhone);
                 unitTextView.setText(currentUnit);
@@ -186,6 +199,7 @@ public class DetailsActivity extends AppCompatActivity {
                     paymentStateTextView.setText(getString(R.string.pending));
                 }
 
+                // Set up the string for describing comments on the transaction
                 String descString = getString(R.string.created_updated) + " " + currentTime + ", " +
                         currentDate + "\n\n" + currentDescription;
                 descriptionTextView.setText(descString);
@@ -193,6 +207,7 @@ public class DetailsActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // Close the cursor
             cursor.close();
         }
     }

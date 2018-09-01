@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#00BCD4</color>
+    <color name="colorAccent">#E040FB</color>
     <color name="search_field_outline_color">#26A69A</color>
     <color name="customer_paid_background_color">#A5D6A7</color>
     <color name="customer_pending_background_color">#EF9A9A</color>

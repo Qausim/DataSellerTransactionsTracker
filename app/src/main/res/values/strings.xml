@@ -27,6 +27,8 @@
     <string name="cost_hint">Input cost</string>
     <string name="payment_hint">Select payment state</string>
     <string name="description_hint">Add comments about transaction</string>
+    <string name="empty_list_text">No entry made yet!</string>
+    <string name="empty_list_subtext">Click on the button at the base to add an entry.</string>
     <string name="id">id</string>
     <string name="created_updated">Created/Updated: </string>
     <string name="created">Created: </string>
@@ -36,7 +38,7 @@
     <string name="tv_unit">Unit: </string>
     <string name="tv_cost">Cost: </string>
     <string name="tv_payment_state">Payment: </string>
-    <string name="tv_description">Description: </string>
+    <string name="tv_description">Comments: </string>
     <string name="details_activity_label">Details</string>
     <string name="empty_name_error_message">Name field cannot be empty!</string>
     <string name="empty_phone_error_message">Phone field should not be empty!</string>
